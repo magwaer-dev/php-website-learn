@@ -1,11 +1,16 @@
 <?php
 
 require 'vendor/autoload.php';
-require 'src/Config/config.php'; // Include the updated config file
+require 'src/Config/Config.php';
+require 'src/Config/Database.php';
 
-$pdo = establishDatabaseConnection(); // Create a PDO instance
+try {
+    $pdo = \MVC\Config\Database::connect();
+} catch (\Exception $e) {
+    die($e->getMessage());
+}
 
 $uri = $_SERVER['REQUEST_URI'];
 
 $router = require 'src/Routes/routes.php';
-$router->dispatch($uri, $pdo); // Pass the $pdo instance to the dispatch method
+$router->dispatch($uri, $pdo);
